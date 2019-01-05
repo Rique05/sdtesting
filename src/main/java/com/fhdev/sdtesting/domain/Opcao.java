@@ -1,8 +1,6 @@
 package com.fhdev.sdtesting.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,33 +8,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
+import com.fhdev.sdtesting.enums.CertaOuErrada;
 
 @Entity
-public class Questao implements Serializable{
+public class Opcao implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String descricao;
+	private Integer certaOuErrada;
 	
 	@ManyToOne
-	@JoinColumn(name = "assunto_id")
-	private Assunto assunto;
+	@JoinColumn(name = "questao_id")
+	private Questao questao;
 	
-	@OneToMany(mappedBy = "questao")
-	private List<Opcao> opcoes = new ArrayList<>();
-	
-	public Questao() {
-		
+	public Opcao() {
+			
 	}
-	
-	public Questao(Integer id, String descricao, Assunto assunto) {
+
+	public Opcao(Integer id, String descricao, CertaOuErrada certaOuErrada, Questao questao) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
-		this.assunto = assunto;
+		this.certaOuErrada = certaOuErrada.getCodigo();
+		this.questao = questao;
 	}
 
 	public Integer getId() {
@@ -54,21 +52,21 @@ public class Questao implements Serializable{
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
-	public Assunto getAssunto() {
-		return assunto;
+
+	public CertaOuErrada getCertaOuErrada() {
+		return CertaOuErrada.toEnum(certaOuErrada);
 	}
 
-	public void setAssunto(Assunto assunto) {
-		this.assunto = assunto;
+	public void setCertaOuErrada(CertaOuErrada certaOuErrada) {
+		this.certaOuErrada = certaOuErrada.getCodigo();
 	}
 
-	public List<Opcao> getOpcoes() {
-		return opcoes;
+	public Questao getQuestao() {
+		return questao;
 	}
 
-	public void setOpcoes(List<Opcao> opcoes) {
-		this.opcoes = opcoes;
+	public void setQuestao(Questao questao) {
+		this.questao = questao;
 	}
 
 	@Override
@@ -87,7 +85,7 @@ public class Questao implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Questao other = (Questao) obj;
+		Opcao other = (Opcao) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
